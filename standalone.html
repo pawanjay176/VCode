@@ -1,0 +1,259 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>VCode: Standalone Mode</title>
+  <!-- Firebase -->
+  <script src="js/firebase.js"></script>
+
+  <!-- CodeMirror -->
+  <script src="js/codemirror.js"></script>
+  <link rel="stylesheet" href="css/codemirror.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.5.0/mode/javascript/javascript.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.5.0/mode/python/python.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.5.0/mode/ruby/ruby.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.5.0/mode/clike/clike.js"></script
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.5.0/mode/cmake/cmake.js"></script>
+  <!-- Firepad -->
+  <link rel="stylesheet" href="css/firepad.css" />
+  <script src="js/firepad.min.js"></script>
+
+  <!--jquery-->
+  <script src="js/jquery-2.1.1.min.js" type="text/javascript" charset="UTF-8"></script>
+
+  <!--BootstrapJs-->
+  <script src="js/bootstrap.min.js" type="text/javascript" charset="UTF-8"></script>
+
+  <!--Bootstrap Css-->
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+  html { height: 100%; }
+  body { margin: 0; height: 100%;  
+    background-image:url("img/images.jpeg"); background-size: cover;}
+
+    #firepad-container {
+     width: 100%;
+     height: 100%;
+   }
+#langsel {
+	margin-left: 30%;
+}
+   </style>
+ </head>
+
+ <body>
+  <div class="container-fluid row col-md-offset-1 col-md-10">
+
+    <!--header-->
+    <div class="row" style="background-color:rgba(244, 179, 80, 0.3);border-radius: 30px;
+    margin-top: 5px;">
+     
+      <div class="col-md-3" style="padding:5px;">
+        <img class="img-responsive" src="img/logo.png" width="220px">
+      </div>
+
+      <!-- Mode Choice-->
+      <div class="col-md-1 col-md-offset-8 " style="padding:5px;text-align:center">
+       
+       <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-top:24px;">Mode <span class="caret"></span></button>
+       <ul class="dropdown-menu" role="menu">
+        <li><a href="#">Standalone Mode</a></li>
+        <li><a href="./collab.html">Collaboration Coding</a></li>
+      </ul>
+
+      </div>
+ <div id="langsel">
+		<select id="lang" de> C, CPP, CPP11, CLOJURE, CSHARP, JAVA,
+			JAVASCRIPT, HASKELL, PERL, PHP, PYTHON, RUBY
+			<option value="C">C</option>
+			<option value="CPP">C++</option>
+			<option value="CPP11">C++11</option>
+			<option value="CLOJURE">Closure</option>
+			<option value="CSHARP">CSharp</option>
+			<option value="JAVA">Java</option>
+			<option value="JAVASCRIPT" selected="selected">Javascript</option>
+			<option value="HASKELL">Haskell</option>
+			<option value="PERL">Perl</option>
+			<option value="PYTHON" >Python</option>
+			<option value="PHP">PHP</option>
+			<option value="RUBY">Ruby</option>
+		</select>
+	</div>
+    </div>
+
+    <!--Editor-->
+    <div class="row" style="height:485px">
+
+      <div id="firepad-container" class="col-md-12"></div>
+    </div>
+
+    <!--Option buttons-->
+    <div class="row" style="margin-top:4px">
+      <div class="col-md-offset-10 col-md-2" style="text-align:center"> 
+
+        <button class="btn btn-success" onclick="downloadInnerHtml('text/html');">Save</button>
+        
+      </div>
+    </div>
+
+    <!--footer-->
+    <div class="row" style="margin-top:3px">
+      <div class="col-md-12" style="padding:3px;background-color:#C0392B;text-align:center;color:white;  border-top-right-radius: 20px;  border-top-left-radius: 20px;">Made by: &nbsp;&nbsp; Amit Gupta and Pawan Dhananjay </div>
+    </div>
+
+  </div>
+
+<script>
+
+var txt;
+
+
+ //To download document text
+ function downloadInnerHtml(mimeType) {
+   // txt = txt.replace("\n"," ");
+   txt = txt.split("\n").join(" ");
+   txt = txt.split("\r").join(" ");
+    //var newline=String.fromCharCode(13);
+
+    //txt=txt.replace("\n/g",newline);
+   //txt = txt.replace(/\r?\n/g, "<br />");
+   var elHtml = txt;
+   console.log(elHtml);
+   var link = document.createElement('a');
+   mimeType = mimeType || 'text/plain';
+   var filename =  'text.txt';
+
+   link.setAttribute('download', filename);
+   link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(elHtml));
+   link.click(); 
+ }
+
+//Initialising Firbase database and Codemirror API
+function init() {
+      // Initialize Firebase with Go-Edit database.
+      var firepadRef = new Firebase('https://collabator.firebaseio.com');
+
+   var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
+        lineNumbers: true,
+        mode: 'javascript'
+	});
+      
+      // Create Firepad (with rich text toolbar and shortcuts enabled).
+     var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
+        {default: "var foo;" });
+	
+	$("#lang").change(function(){
+        switch($("#lang").val()){
+        case 'PYTHON':
+       	codeMirror.setOption("mode", 'python');
+        break;
+        case 'RUBY':
+        editor.getSession().setMode("ace/mode/ruby");
+        break;
+        case 'PERL':
+        editor.getSession().setMode("ace/mode/perl");
+        break;
+        case 'HASKELL':
+        editor.getSession().setMode("ace/mode/haskell");
+        break;
+        case 'JAVASCRIPT':
+        codeMirror.setOption("mode", 'javascript');
+        break;
+        case 'CPP':
+        editor.getSession().setMode("clike");
+        break;
+        case 'CPP11':
+        editor.getSession().setMode("cmake");
+        break;
+        case 'C':
+        editor.getSession().setMode("ace/mode/c_cpp");
+        break;
+		case 'JAVA':
+        editor.getSession().setMode("ace/mode/java");
+        break;
+        case 'CSHARP':
+        editor.getSession().setMode("ace/mode/csharp");
+        break;
+        case 'PHP':
+        editor.getSession().setMode("ace/mode/php");
+        break;   
+        case 'CLOJURE':
+        editor.getSession().setMode("ace/mode/clojure");
+        break;
+        default:
+        alert("Dafuq?");
+        break;     
+        }
+        });
+      //// Initialize contents.
+      
+      // An example of a complex custom entity.
+      firepad.registerEntity('checkbox', {
+        render: function (info, entityHandler) {
+          var inputElement = document.createElement('input');
+          inputElement.setAttribute('type', 'checkbox');
+          if(info.checked) {
+            inputElement.checked = 'checked';
+          }
+          inputElement.addEventListener('click', function () {
+            entityHandler.replace({checked:this.checked});
+          });
+          return inputElement;
+        }.bind(this),
+        fromElement: function (element) {
+          var info = {};
+          if(element.hasAttribute('checked')) {
+            info.checked = true;
+          }
+          return info;
+        },
+        update: function (info, element) {
+          if (info.checked) {
+            element.checked = 'checked';
+          } else {
+            element.checked = null;
+          }
+        },
+        export: function (info) {
+          var inputElement = document.createElement('checkbox');
+          if(info.checked) {
+            inputElement.setAttribute('checked', true);
+          }
+          return inputElement;
+        }
+      });
+
+  //To do action on successful write in database
+  firepad.on('synced', function(isSynced) {
+   var str;
+   str=firepad.getText();
+   txt=str;
+      //console.log(str);
+    });
+
+  }
+
+  // Helper to get hash from end of URL or generate a random one.
+  function getExampleRef() {
+    //var ref = new Firebase('https://firepad.firebaseio-demo.com');
+    var ref = new Firebase('https://collabator.firebaseio.com');
+    var hash = window.location.hash.replace(/#/g, '');
+    if (hash) {
+      ref = ref.child(hash);
+    } else {
+      ref = ref.push(); // generate unique location.
+      window.location = window.location + '#' + ref.key(); // add it as a hash to the URL.
+    }
+    if (typeof console !== 'undefined')
+      console.log('Firebase data: ', ref.toString());
+    return ref;
+  }
+    
+  init();
+    
+  </script>
+</body>
+</html>
