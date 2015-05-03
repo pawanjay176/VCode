@@ -75,7 +75,7 @@
          <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-top:24px;">Mode <span class="caret"></span></button>
          
          <ul class="dropdown-menu" role="menu">
-          <li><a href="./standalone.html">Standalone Mode</a></li>
+          <li><a href="./index.html">Single user Mode</a></li>
           <li><a href="#">Collaboration Coding</a></li>
         </ul>
 
@@ -110,10 +110,27 @@
   <div class="row" style="margin-top:3px">
     <div class="col-md-offset-10 col-md-2" style="text-align:center"> 
       <button class="btn btn-success" onclick="downloadInnerHtml('text/html');">Save</button>
-      
     </div>
   </div>
+	<div id="share-box">
+            <table>
+              <tr>
+                <td>
+                  <input name="text1" type="text" readonly="readonly" id="url" value = "" />
+                  <br> <button onclick="myFunction()">Click to generate URL</button> </br>
+                  
+                </td>
+			</tr>
+			</table>
+			</div>
 
+<script>
+	function myFunction() {
+	var text1 = document.getElementsByName('text1')[0];
+	var x = document.URL;
+    text1.value = x;
+}
+</script>
   <!--footer-->
   <div class="row" style="margin-top:3px">
     <div class="col-md-12" style="padding:3px;background-color:#913D88; text-align:center; color:white; border-top-right-radius: 20px;  border-top-left-radius: 20px;">Made by:&nbsp;&nbsp; Amit Gupta and Pawan Dhananjay
@@ -124,9 +141,8 @@
 
 <script>
 
+
 var txt;
-  
-  
   //To download document text
   function downloadInnerHtml(mimeType) {
      // txt = txt.replace("\n"," ");
